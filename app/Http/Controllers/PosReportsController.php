@@ -287,15 +287,21 @@ class PosReportsController extends Controller
         $endDate    = $request->input('endDate', date('Y-m-d'));
 
 
-        $data = DB::table('invoice_details')
-            
-            ->when($request->filled('product_variation_id'), fn($q) => $q->where('product_variation_id', $request->product_variation_id))
-            
-            ->where('type', 'INV')
-            ->whereBetween(DB::raw('DATE(date)'), [$startDate, $endDate])
-            ->orderByDesc('date')
-            ->orderByDesc('id')
-            ->get();
+        $data = DB::table('invoice_details as id')
+    ->leftJoin('product_variations as pv', 'pv.id', '=', 'id.product_variation_id')
+    ->when(
+        $request->filled('product_variation_id'),
+        fn ($q) => $q->where('id.product_variation_id', $request->product_variation_id)
+    )
+    ->where('id.type', 'INV')
+    ->whereBetween(DB::raw('DATE(id.date)'), [$startDate, $endDate])
+    ->orderByDesc('id.date')
+    ->orderByDesc('id.id')
+    ->select([
+        'id.*',
+        'pv.name as product_name'
+    ])
+    ->get();
         
         // ->select('product_variation_id','type','variation_barcode','invoice_no','date','quantity','unit_price','subtotal','discount_amount','grand_total')
         // return response()->json($data);

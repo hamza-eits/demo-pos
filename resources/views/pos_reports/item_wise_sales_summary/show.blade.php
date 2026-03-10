@@ -32,6 +32,7 @@
                                             <th>#</th>
                                             <th>Invoice No</th>
                                             <th>Item No</th>
+                                            <th>Item Name</th>
                                             <th>Date</th>
                                             <th>Unit Price</th>
                                             <th>{{ __('file.Quantity') }}</th>
@@ -47,6 +48,7 @@
                                             <td class="text-start">{{ $loop->iteration }}</td>
                                             <td class="text-start">{{ $value->invoice_no }}</td>
                                             <td class="text-start">{{ $value->variation_barcode }}</td>
+                                            <td class="text-start">{{ $value->product_name }}</td>
                                             <td class="text-start">{{ date('d-m-Y', strtotime($value->date)) }}</td>
                                             <td class="text-start">{{ $value->unit_price }}</td>
                                             <td class="text-start">{{ $value->quantity }}</td>

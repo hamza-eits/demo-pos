@@ -1,0 +1,12 @@
+
+TRUNCATE `invoice_details`; TRUNCATE `invoice_masters`; TRUNCATE `invoice_payments`;
+TRUNCATE `journals`; TRUNCATE `vouchers`; TRUNCATE `voucher_details`;
+
+
+price = row-unit-price
+item-subtotal = row-subtotal
+row-item-discount-value = row-discount-value
+row-item-total-after-discount = row-subtotal-after-discount
+row-item-discount-type = row-discount-type
+item-discount-amount = row-discount-amount
+row-item-discount-unit-price = row-discount-price

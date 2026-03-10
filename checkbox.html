@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Radio Button Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h3>Select Discount Type:</h3>
+<form id="discountForm">
+    <div class="discout-type">
+        <label>
+            <input type="radio" name="discount_type" value="fixed" checked> Fixed
+        </label><br>
+        <label>
+            <input type="radio" name="discount_type" value="percentage"> Percentage
+        </label><br><br>
+    </div>
+
+    <button type="button" id="getValue">Get Checked Value</button>
+    <button  type="button" id="setValue">Set to Percentage</button></form>
+
+
+<script>
+   $('#getValue').click(function() {
+        let checkedValue = $('.discout-type input[name="discount_type"]:checked').val();
+        alert("Checked value is: " + checkedValue);
+    });
+
+    // Step 2: Set 'percentage' as checked
+    $('#setValue').click(function() {
+        $('.discout-type input[name="discount_type"][value="percentage"]').prop('checked', true);
+    }); 
+</script>
+
+</body>
+</html>

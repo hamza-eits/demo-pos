@@ -769,11 +769,11 @@
 <script>
     function resetOrderPage() {
         $('#order-items-table tbody').empty(''); //empty table
-        $("#pos-screen-store")[0].reset(); //form reset
-        $("#shipping-form")[0].reset(); //form reset
-        $("#discount-form")[0].reset(); //form reset
-        $("#multiple-payments-form")[0].reset(); //form reset
 
+        if ($("#pos-screen-store")[0]) $("#pos-screen-store")[0].reset();
+        if ($("#shipping-form")[0]) $("#shipping-form")[0].reset();
+        if ($("#discount-form")[0]) $("#discount-form")[0].reset();
+        if ($("#multiple-payments-form")[0]) $("#multiple-payments-form")[0].reset();
     }
 </script>
 

@@ -15,7 +15,7 @@
             <tr>
                 <td>{{ $order->invoice_no }}</td>
                 <td>{{ $order->party->business_name ?? 'N/A' }}</td>
-                <td>{{ $order->party->business_name ?? 'N/A' }}</td>
+                <td>{{ $order->party->mobile ?? 'N/A' }}</td>
                 <td>{{ $order->serving_type }}</td>
                 <td>{{ $order->grand_total }}</td> 
                 <td>

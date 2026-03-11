@@ -9,17 +9,14 @@
     <style>
         * {
             font-size: 10px;
-            /* font-family: monospace; Use a monospaced font */
             font-family: 'Ubuntu', sans-serif;
             margin: 0;
             padding: 0;
             line-height: 24px;
-
         }
 
         .container {
             width: 70mm;
-            /* Standard thermal paper width */
             margin: 0 auto;
             padding: 5px;
         }
@@ -29,15 +26,25 @@
             text-align: center;
         }
 
-        .header div {
-            font-size: 14px;
-            line-height: 20px;
-            font-weight: bold;
-        }
-
         .header img {
             width: 270px;
             height: auto;
+        }
+
+        .company-details {
+            text-align: center;
+            margin: 5px 0;
+            line-height: 16px;
+        }
+
+        .company-name {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 20px;
+        }
+
+        .company-info {
+            font-size: 10px;
         }
 
         .title {
@@ -55,7 +62,6 @@
             border-top: 1px dashed #000;
         }
 
-
         .register-table {
             width: 100%;
             border-collapse: collapse;
@@ -66,7 +72,6 @@
 
         .register-table th,
         .register-table td {
-            /* border: 1px solid #000; */
             padding: 3px;
             font-size: 10px;
         }
@@ -82,8 +87,6 @@
 
             @page {
                 size: 70mm auto;
-                /* Width 80mm, height auto */
-
             }
         }
     </style>
@@ -91,7 +94,6 @@
         .summary-table {
             width: 100%;
             margin-bottom: 10px;
-
         }
 
         .summary-table tr td {
@@ -110,39 +112,41 @@
             font-size: 7px;
         }
 
-        .contact {
-            margin-top: 7px;
-            margin-bottom: 10px;
-        }
-
-        .whatsapp-logo {
-            height: 16px;
-            vertical-align: middle;
-            margin-right: 5px;
-            margin-top: 5px;
-        }
-
         .summary-information {
             font-weight: bold;
             line-height: 14px;
-
         }
     </style>
 </head>
 
 <body>
+
+    {{-- LOGO --}}
     <div class="header">
-        <img src="{{ asset('company-logo-1.png') }}" alt="Logo">
-        {{-- @if ($invoiceHeader)
-            @foreach ($invoiceHeader as $row)
-                <div>{{ $row['value'] }}</div>
-            @endforeach
-
-
-        @endif --}}
+        @if ($company && $company->logo)
+            <img src="{{ asset('company/' . $company->logo) }}" alt="Logo">
+        @endif
     </div>
-    <div class="container">
 
+    {{-- COMPANY DETAILS --}}
+    <div class="company-details">
+        @if ($company)
+            @if ($company->name)
+                <div class="company-name">{{ $company->name }}</div>
+            @endif
+            @if ($company->address)
+                <div class="company-info">{{ $company->address }}</div>
+            @endif
+            @if ($company->contact_no)
+                <div class="company-info">Tel: {{ $company->contact_no }}</div>
+            @endif
+            @if ($company->trn_no)
+                <div class="company-info">TRN: {{ $company->trn_no }}</div>
+            @endif
+        @endif
+    </div>
+
+    <div class="container">
 
         <div class="divider"></div>
 
@@ -159,25 +163,17 @@
                 <tr>
                     <td>Invoice No:</td>
                     <td style="text-align: left">{{ $order->invoice_no }}</td>
-
                     <td style="text-align: right">Date:</td>
                     <td>{{ date('d/m/Y', strtotime($order->date)) }}</td>
                 </tr>
                 <tr>
-
-                </tr>
-                <tr>
                     <td>Customer:</td>
                     <td style="text-align: left">{{ $order->party->business_name ?? '-' }}</td>
-                       
-                    
                     <td style="text-align: right">Phone No</td>
                     <td>{{ $order->party->mobile ?? '' }}</td>
                 </tr>
-
                 <tr>
-                    <td colspan="4" style="text-align: left">Address: {{ $order->party->shipping_address ?? '-' }}
-                    </td>
+                    <td colspan="4" style="text-align: left">Address: {{ $order->party->shipping_address ?? '-' }}</td>
                 </tr>
             </tbody>
         </table>
@@ -202,11 +198,7 @@
                     </td>
                     <td style="text-align:center">{{ number_format($detail->quantity, 3) }}</td>
                     <td style="text-align:right">{{ $detail->unit_price }}</td>
-
-
-
                     <td style="text-align:center">
-
                         @if ($detail->discount_value > 0)
                             {{ $detail->discount_type == 'percentage'
                                 ? number_format($detail->discount_value) . '%'
@@ -214,72 +206,36 @@
                         @else
                             -
                         @endif
-
-
                     </td>
                     <td style="text-align:right">{{ $detail->grand_total }}</td>
                 </tr>
             @endforeach
         </table>
 
-
-        <table class="summary-table" style="border: 1px solid black;border-top: none">
+        <table class="summary-table" style="border: 1px solid black; border-top: none">
             @foreach ($data as $row)
                 <tr>
                     <td class="summary-information">{{ $row['name'] }}</td>
                     <td class="summary-information">{{ $row['value'] }}</td>
                 </tr>
             @endforeach
-
             <tr>
                 <td class="summary-information">Total</td>
                 <td class="summary-information">{{ $order->grand_total }}</td>
             </tr>
-
         </table>
+
         <div class="divider"></div>
 
-        {{-- <table>
-            <tr>
-                <td style="width:5%"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-logo"></td>
-                <td style="width:45%">WhatsApp: 055 5511 375</td>
-                <td style="width:50%; text-align:right">Land Line: 04 5521 584</td>
-            </tr>
-        </table> --}}
-
-
-
-
         <strong>
-            <div style="text-align: center; font-size: 13px; margin-top: 10px;margin-bottom: 5px;">
+            <div style="text-align: center; font-size: 13px; margin-top: 10px; margin-bottom: 5px;">
                 *** Thank you for your business ***
             </div>
         </strong>
         <br><br><br>
         <hr>
 
-
-
-
-
-
     </div>
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

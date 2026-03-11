@@ -443,7 +443,7 @@ class PosController extends Controller
 
         // return response()->json($invoiceHeader);
 
-        return view('pos.render.print_invoice', compact('order','data','invoiceHeader'));
+        return view('pos.render.print_invoice', compact('order','data','invoiceHeader','company'));
     }
     public function printKot($id)
     {

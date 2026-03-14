@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Product;
-use App\Models\Material;
-use App\Models\CustomField;
+use App\Models\Accounting\ChartOfAccount;
+use App\Models\Accounting\Expense;
 use App\Models\CashRegister;
-use App\Models\ProductModel;
-use Illuminate\Http\Request;
+use App\Models\CustomField;
 use App\Models\InvoiceDetail;
 use App\Models\InvoiceMaster;
-use App\Models\Startup\Brand;
 use App\Models\InvoicePayment;
+use App\Models\Material;
+use App\Models\Product;
+use App\Models\ProductModel;
 use App\Models\ProductVariation;
+use App\Models\Startup\Brand;
 use App\Models\Startup\Category;
-use App\Models\Accounting\Expense;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Accounting\ChartOfAccount;
 
 class PosReportsController extends Controller
 {
@@ -308,6 +309,45 @@ class PosReportsController extends Controller
 
 
         return view('pos_reports.item_wise_sales_summary.show',compact('data','startDate','endDate'));
+    }
+
+    public function billerWiseSalesRequest()
+    {
+        // Only fetch users with type = 'user' (billers)
+        $billers = User::where('type', 'user')
+                    ->orderBy('name')
+                    ->get();
+    
+        return view('pos_reports.biller_wise_sales_summary.request', compact('billers'));
+    }
+    
+    public function billerWiseSalesShow(Request $request)
+    {
+        $startDate = $request->input('startDate', date('Y-m-d'));
+        $endDate   = $request->input('endDate',   date('Y-m-d'));
+        $billerId  = $request->input('biller_id');
+    
+        $data = DB::table('invoice_details as id')
+            ->leftJoin('product_variations as pv', 'pv.id', '=', 'id.product_variation_id')
+            ->leftJoin('invoice_masters as im',    'im.invoice_no', '=', 'id.invoice_no')
+            // ✅ Filter by biller_id from invoice_masters
+            ->where('im.biller_id', $billerId)
+            ->where('id.type', 'INV')
+            ->whereBetween(DB::raw('DATE(id.date)'), [$startDate, $endDate])
+            ->orderByDesc('id.date')
+            ->orderByDesc('id.id')
+            ->select([
+                'id.*',
+                'pv.name as product_name',
+            ])
+            ->get();
+    
+        // Get biller name to display in the report header
+        $billerName = User::find($billerId)?->name ?? 'N/A';
+    
+        return view('pos_reports.biller_wise_sales_summary.show',
+            compact('data', 'startDate', 'endDate', 'billerName')
+        );
     }
 
 

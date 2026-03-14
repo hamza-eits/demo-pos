@@ -91,6 +91,9 @@
                                         href="{{ route('pos-reports.itemWiseSalesSummaryRequest') }}">Item Wise Sales
                                         Summary</a>
                                     <a class="dropdown-item"
+                                        href="{{ route('pos-reports.billerWiseSales') }}">Biller Wise Sales
+                                        Summary</a>
+                                    <a class="dropdown-item"
                                         href="{{ route('pos-reports.inventorySummaryRequest') }}">Inventory Summary</a>
                                     {{-- <a class="dropdown-item"
                                         href="{{ route('pos-reports.purchaseSummaryRequest') }}">Purchase Report

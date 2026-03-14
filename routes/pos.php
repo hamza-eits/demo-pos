@@ -50,6 +50,9 @@ Route::middleware(['auth','role:super-admin|admin'])->group(function(){
 
     Route::get('pos-reports/inventory-detail-summary-request', [PosReportsController::class, 'inventoryDetailSummaryRequest'])->name('pos-reports.inventoryDetailSummaryRequest');
     Route::post('pos-reports/inventory-detail-summary-show', [PosReportsController::class, 'inventoryDetailSummaryShow'])->name('pos-reports.inventoryDetailSummaryShow');
+
+    Route::get( '/pos-reports/biller-wise-sales',       [PosReportsController::class, 'billerWiseSalesRequest'])->name('pos-reports.billerWiseSales');
+    Route::post('/pos-reports/biller-wise-sales/show',  [PosReportsController::class, 'billerWiseSalesShow'])->name('pos-reports.billerWiseSalesShow');
 });
 
 
